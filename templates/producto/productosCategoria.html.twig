@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Productos de la categoria{% endblock %}
+
+{% block body %}
+{{ parent() }}
+
+<form action="/pedidos/carrito" method="POST">
+    <ul>
+    {% for producto in productos %}
+        <li>
+            {{ producto.nombre }} 
+            <input type="number" name="cantidad" id="cantidad"> 
+            <input type="hidden" value="{{ producto.id }}" name="id" id="id">
+            <input type="hidden" value="{{ producto.nombre }}" name="nombre" id="nombre">
+            <button type="submit">Añadir</button>
+        </li>
+    {% endfor %}
+    </ul>
+</form>
+{% endblock %}

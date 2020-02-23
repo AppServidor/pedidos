@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categoria{% endblock %}
+
+{% block body %}
+{{ parent() }}
+
+<ul>
+{% for categorias in categoria %}
+    <li><a href='/producto/{{ categorias.id }}/mostrar'>{{ categorias.nombre|e  }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

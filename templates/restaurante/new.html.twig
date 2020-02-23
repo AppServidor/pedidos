@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Restaurante{% endblock %}
+
+{% block body %}
+    <h1>Create new Restaurante</h1>
+
+    {{ include('restaurante/_form.html.twig') }}
+
+    <a href="{{ path('restaurante_index') }}">back to list</a>
+{% endblock %}

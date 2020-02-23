@@ -6,7 +6,18 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+        <div>
+        {{ app.user.correo }}
+        <a href="/categoria">Home</a>
+        <a href="/pedidos/mostrarcarrito">Carrito</a>
+        <a href="/logout">Logout</a>
+        </div>
+        <hr>
+        
+        
+        {% endblock %}
         {% block javascripts %}{% endblock %}
+
     </body>
 </html>
