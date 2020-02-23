@@ -4,15 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Pedidos;
 use App\Entity\Producto;
-use App\Entity\Restaurante;
 use App\Form\PedidosType;
 use App\Repository\PedidosRepository;
-use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * @Route("/pedidos")
@@ -40,15 +39,17 @@ class PedidosController extends AbstractController
      /**
      * @Route("/nuevo", name="nuevo",  methods={"GET","POST"})
      */
-    public function realizarPedido(SessionInterface $session)
+    public function realizarPedido(SessionInterface $session, \Swift_Mailer $mailer)
     {
         $carrito = $session->get('carrito');
         //var_dump($carrito);
         $restaurante=$this->getUser();
         
         $pedido = new Pedidos();
+        $productosMail = array();
         foreach ($carrito as $key => $value) {
             $producto = $this->getDoctrine()->getRepository(Producto::class)->find($key);
+            $productosMail = $producto;
             $pedido->addProducto($producto);
         }
         $pedido->setFecha( new \DateTime());
@@ -58,6 +59,22 @@ class PedidosController extends AbstractController
         $this->getDoctrine()->getManager()->persist($pedido);
         $this->getDoctrine()->getManager()->flush();
 
+        $session->set('carrito',array());
+
+
+        $message = (new \Swift_Message('Pedido'))
+        ->setFrom('programandoqueesgerundio@gmail.com')
+        ->setTo($restaurante->getCorreo())
+        ->setBody(
+            $this->renderView(
+                // templates/emails/registration.html.twig
+                'emails/registration.html.twig',array('productos'=>$productosMail)
+            ),
+            'text/html'
+        )
+    ;
+
+    $mailer->send($message);
         return $this->render('pedidos/nuevo.html.twig');
     }
     /**

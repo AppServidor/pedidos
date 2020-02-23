@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pedido realizado{% endblock %}
+
+{% block body %}
+{{ parent() }}
+
+    <p>Pedido realizado con exito</p>
+    <table>
+    {% for prod in productos %}
+        <tr>
+            <td> prod.nombre </td>
+            <td> prod.descripcion </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
